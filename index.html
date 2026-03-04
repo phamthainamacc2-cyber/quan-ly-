@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pho Dem - Bep & Quan Ly</title>
+<title>Pho Dem - Bep Quan Ly</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
 :root{--bg:#0D1117;--sf:#161B22;--sf2:#21262D;--bd:rgba(255,255,255,.08);--gold:#D4A843;--gd:rgba(212,168,67,.15);--red:#F85149;--rd:rgba(248,81,73,.15);--ylw:#E3B341;--yd:rgba(227,179,65,.15);--grn:#3FB950;--gnd:rgba(63,185,80,.15);--txt:#E6EDF3;--mu:#7D8590;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -16,7 +18,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Be Vietnam Pro',sans-ser
 .dot{width:7px;height:7px;background:var(--grn);border-radius:50%;animation:blink 1.2s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 .tr{display:flex;align-items:center;gap:12px;}
-.clk{font-size:13px;color:var(--mu);font-variant-numeric:tabular-nums;}
+.clk{font-size:13px;color:var(--mu);}
 .snd{background:var(--sf2);border:1px solid var(--bd);color:var(--mu);padding:6px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .2s;}
 .snd.on{background:var(--gd);border-color:var(--gold);color:var(--gold);}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;padding:20px 24px 0;}
@@ -28,11 +30,11 @@ body{background:var(--bg);color:var(--txt);font-family:'Be Vietnam Pro',sans-ser
 .fb{background:var(--sf);border:1px solid var(--bd);color:var(--mu);padding:7px 16px;border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s;font-family:inherit;}
 .fb.on{background:var(--gd);border-color:var(--gold);color:var(--gold);}
 .sep{flex:1;}
-.clrbtn{background:transparent;border:1px solid rgba(248,81,73,.3);color:var(--red);padding:7px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .2s;}
+.clrbtn{background:transparent;border:1px solid rgba(248,81,73,.3);color:var(--red);padding:7px 14px;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit;}
 .clrbtn:hover{background:var(--rd);}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;padding:16px 24px 50px;}
-.card{background:var(--sf);border-radius:12px;overflow:hidden;border:1px solid var(--bd);animation:ci .4s cubic-bezier(.34,1.56,.64,1);transition:box-shadow .2s;}
-@keyframes ci{from{opacity:0;transform:translateY(-14px) scale(.96)}to{opacity:1;transform:none}}
+.card{background:var(--sf);border-radius:12px;overflow:hidden;border:1px solid var(--bd);animation:ci .4s ease;transition:box-shadow .2s;}
+@keyframes ci{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
 .card:hover{box-shadow:0 4px 24px rgba(0,0,0,.45);}
 .card.s-new{border-top:3px solid var(--red);}
 .card.s-preparing{border-top:3px solid var(--ylw);}
@@ -40,7 +42,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Be Vietnam Pro',sans-ser
 .ch{padding:13px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bd);}
 .cid{font-family:'Playfair Display',serif;font-size:15px;color:var(--gold);}
 .ctbl{font-size:12px;color:var(--mu);margin-top:2px;}
-.pill{padding:4px 11px;border-radius:10px;font-size:11px;font-weight:700;letter-spacing:.3px;}
+.pill{padding:4px 11px;border-radius:10px;font-size:11px;font-weight:700;}
 .p-new{background:var(--rd);color:var(--red);border:1px solid rgba(248,81,73,.35);}
 .p-prep{background:var(--yd);color:var(--ylw);border:1px solid rgba(227,179,65,.35);}
 .p-done{background:var(--gnd);color:var(--grn);border:1px solid rgba(63,185,80,.35);}
@@ -48,10 +50,8 @@ body{background:var(--bg);color:var(--txt);font-family:'Be Vietnam Pro',sans-ser
 .row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;}
 .row:last-child{border:none;}
 .rl{display:flex;align-items:center;gap:8px;}
-.em{font-size:18px;}
-.qt{color:var(--mu);font-size:11px;margin-left:3px;}
-.pr{color:var(--mu);font-size:12px;}
-.cnote{margin:0 16px 10px;background:rgba(255,255,255,.04);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--mu);font-style:italic;line-height:1.5;}
+.em{font-size:18px;}.qt{color:var(--mu);font-size:11px;margin-left:3px;}.pr{color:var(--mu);font-size:12px;}
+.cnote{margin:0 16px 10px;background:rgba(255,255,255,.04);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--mu);font-style:italic;}
 .cnote b{color:var(--txt);font-style:normal;}
 .cf{padding:12px 16px;border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.18);}
 .ctot{font-family:'Playfair Display',serif;font-size:16px;color:var(--gold);}
@@ -66,55 +66,42 @@ body{background:var(--bg);color:var(--txt);font-family:'Be Vietnam Pro',sans-ser
 .empty{grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--mu);}
 .ei{font-size:56px;margin-bottom:14px;opacity:.4;display:block;}
 .empty h3{font-family:'Playfair Display',serif;font-size:20px;color:var(--mu);margin-bottom:8px;}
-.notif{position:fixed;top:70px;right:24px;z-index:100;background:var(--red);color:#fff;padding:11px 20px;border-radius:10px;font-size:13px;font-weight:700;box-shadow:0 4px 22px rgba(248,81,73,.5);display:none;animation:nIn .3s ease;}
-@keyframes nIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
+.notif{position:fixed;top:70px;right:24px;z-index:100;background:var(--red);color:#fff;padding:11px 20px;border-radius:10px;font-size:13px;font-weight:700;box-shadow:0 4px 22px rgba(248,81,73,.5);display:none;}
 @media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr);}.topbar,.grid,.stats,.fbar{padding-left:14px;padding-right:14px;}}
 </style>
 </head>
 <body>
-
 <div class="topbar">
   <div class="tl">
-    <div class="logo">Ph&#7889; &#272;&#234;m &#8212; B&#7871;p &#128102;&#8205;&#127859;</div>
+    <div class="logo">Pho Dem - Bep</div>
     <div class="live"><div class="dot"></div>LIVE</div>
   </div>
   <div class="tr">
     <div class="clk" id="clk">--:--:--</div>
-    <button class="snd on" id="sndBtn" onclick="doToggleSound()">&#128276; &#194;m thanh</button>
+    <button class="snd on" id="sndBtn" onclick="toggleSound()">&#128276; Am thanh</button>
   </div>
 </div>
-
 <div class="stats">
-  <div class="stat sn"><div class="sv" id="sN">0</div><div class="sl">&#128308; &#272;&#417;n m&#7899;i</div></div>
-  <div class="stat sp"><div class="sv" id="sP">0</div><div class="sl">&#127937; &#272;ang l&#224;m</div></div>
-  <div class="stat sd"><div class="sv" id="sD">0</div><div class="sl">&#9989; Ho&#224;n th&#224;nh</div></div>
-  <div class="stat sr"><div class="sv" id="sR">0&#273;</div><div class="sl">&#128176; Doanh thu</div></div>
+  <div class="stat sn"><div class="sv" id="sN">0</div><div class="sl">&#128308; Don moi</div></div>
+  <div class="stat sp"><div class="sv" id="sP">0</div><div class="sl">&#127937; Dang lam</div></div>
+  <div class="stat sd"><div class="sv" id="sD">0</div><div class="sl">&#9989; Hoan thanh</div></div>
+  <div class="stat sr"><div class="sv" id="sR">0d</div><div class="sl">&#128176; Doanh thu</div></div>
 </div>
-
 <div class="fbar">
-  <button class="fb on" onclick="doFilter('all',this)">T&#7845;t c&#7843;</button>
-  <button class="fb" onclick="doFilter('new',this)">&#128308; &#272;&#417;n m&#7899;i</button>
-  <button class="fb" onclick="doFilter('preparing',this)">&#127937; &#272;ang l&#224;m</button>
-  <button class="fb" onclick="doFilter('done',this)">&#9989; Xong</button>
+  <button class="fb on" onclick="setFilter('all',this)">Tat ca</button>
+  <button class="fb" onclick="setFilter('new',this)">&#128308; Don moi</button>
+  <button class="fb" onclick="setFilter('preparing',this)">&#127937; Dang lam</button>
+  <button class="fb" onclick="setFilter('done',this)">&#9989; Xong</button>
   <div class="sep"></div>
-  <button class="clrbtn" onclick="doClearDone()">&#128465; X&#243;a &#273;&#417;n &#273;&#227; xong</button>
+  <button class="clrbtn" onclick="clearDone()">&#128465; Xoa don da xong</button>
 </div>
-
 <div class="grid" id="grid">
-  <div class="empty">
-    <span class="ei">&#127869;&#65039;</span>
-    <h3>Ch&#432;a c&#243; &#273;&#417;n n&#224;o</h3>
-    <p>&#272;&#417;n m&#7899;i t&#7915; kh&#225;ch s&#7869; xu&#7845;t hi&#7879;n &#7903; &#273;&#226;y theo th&#7901;i gian th&#7921;c</p>
-  </div>
+  <div class="empty"><span class="ei">&#127869;</span><h3>Chua co don nao</h3><p>Don moi tu khach se xuat hien o day theo thoi gian thuc</p></div>
 </div>
-
 <div class="notif" id="notif"></div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onChildAdded, onChildChanged, onChildRemoved, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
-const cfg = {
+<script>
+var firebaseConfig = {
   apiKey: "AIzaSyA7OfDr2XjoOdFT5xYd_tdwktrr04S9vdU",
   authDomain: "pho-dem-restaurant.firebaseapp.com",
   databaseURL: "https://pho-dem-restaurant-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -123,32 +110,28 @@ const cfg = {
   messagingSenderId: "377597165170",
   appId: "1:377597165170:web:65066c75ad2cf0354e0ceb"
 };
-const db = getDatabase(initializeApp(cfg));
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
 
-const fmt = n => Number(n).toLocaleString('vi-VN') + 'd';
-const PAY = { cash: 'Tien mat', card: 'The ngan hang', transfer: 'Chuyen khoan' };
-const SPILL = {
-  new:       { label: 'MOI',       cls: 'p-new'  },
-  preparing: { label: 'DANG LAM',  cls: 'p-prep' },
-  done:      { label: 'XONG',      cls: 'p-done' }
-};
+var orders = {}, filter = 'all', soundOn = true, firstLoad = true;
+var PAY = { cash:'Tien mat', card:'The ngan hang', transfer:'Chuyen khoan' };
 
-let orders = {}, filter = 'all', soundOn = true, firstLoad = true;
+function fmt(n) { return Number(n).toLocaleString('vi-VN') + 'd'; }
 
-setInterval(() => {
+setInterval(function(){
   document.getElementById('clk').textContent = new Date().toLocaleTimeString('vi-VN');
 }, 1000);
-setTimeout(() => { firstLoad = false; }, 1800);
+setTimeout(function(){ firstLoad = false; }, 2000);
 
 function beep() {
   if (!soundOn) return;
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    [880, 1100, 880].forEach((freq, i) => {
-      const o = ctx.createOscillator(), g = ctx.createGain();
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [880, 1100, 880].forEach(function(freq, i){
+      var o = ctx.createOscillator(), g = ctx.createGain();
       o.connect(g); g.connect(ctx.destination);
       o.frequency.value = freq;
-      const t = ctx.currentTime + i * 0.13;
+      var t = ctx.currentTime + i * 0.13;
       g.gain.setValueAtTime(0.28, t);
       g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
       o.start(t); o.stop(t + 0.15);
@@ -157,104 +140,118 @@ function beep() {
 }
 
 function showNotif(msg) {
-  const n = document.getElementById('notif');
+  var n = document.getElementById('notif');
   n.textContent = msg; n.style.display = 'block';
   clearTimeout(n._t);
-  n._t = setTimeout(() => n.style.display = 'none', 5000);
+  n._t = setTimeout(function(){ n.style.display = 'none'; }, 5000);
 }
 
 // Firebase listeners
-onChildAdded(ref(db, 'orders'), snap => {
-  orders[snap.key] = { ...snap.val(), _key: snap.key };
+db.ref('orders').on('child_added', function(snap) {
+  orders[snap.key] = snap.val();
+  orders[snap.key]._key = snap.key;
   if (!firstLoad) {
     beep();
-    const o = snap.val();
-    showNotif('Don moi: ' + (o.orderId || '') + ' - ' + (o.table || ''));
+    showNotif('Don moi: ' + (snap.val().orderId || '') + ' - ' + (snap.val().table || ''));
   }
   render();
 });
 
-onChildChanged(ref(db, 'orders'), snap => {
-  orders[snap.key] = { ...snap.val(), _key: snap.key };
+db.ref('orders').on('child_changed', function(snap) {
+  orders[snap.key] = snap.val();
+  orders[snap.key]._key = snap.key;
   render();
 });
 
-onChildRemoved(ref(db, 'orders'), snap => {
+db.ref('orders').on('child_removed', function(snap) {
   delete orders[snap.key];
   render();
 });
 
+function setFilter(f, btn) {
+  filter = f;
+  document.querySelectorAll('.fb').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+  render();
+}
+
+function toggleSound() {
+  soundOn = !soundOn;
+  var b = document.getElementById('sndBtn');
+  b.textContent = soundOn ? '&#128276; Am thanh' : '&#128277; Tat tieng';
+  b.classList.toggle('on', soundOn);
+}
+
+function clearDone() {
+  Object.keys(orders).forEach(function(k){
+    if (orders[k].status === 'done') db.ref('orders/' + k).remove();
+  });
+}
+
+function setStatus(key, status) {
+  db.ref('orders/' + key).update({ status: status });
+}
+
+function delOrder(key) {
+  db.ref('orders/' + key).remove();
+}
+
 function render() {
   updateStats();
-  const grid = document.getElementById('grid');
-  const list = Object.values(orders)
-    .filter(o => filter === 'all' || o.status === filter)
-    .sort((a, b) => ({ new:0, preparing:1, done:2 }[a.status] - { new:0, preparing:1, done:2 }[b.status]));
+  var grid = document.getElementById('grid');
+  var statusOrder = { new:0, preparing:1, done:2 };
+  var list = Object.values(orders)
+    .filter(function(o){ return filter === 'all' || o.status === filter; })
+    .sort(function(a, b){ return statusOrder[a.status] - statusOrder[b.status]; });
 
   if (!list.length) {
-    const msgs = { all:'Chua co don nao', new:'Khong co don moi', preparing:'Khong co don dang lam', done:'Chua co don hoan thanh' };
-    grid.innerHTML = '<div class="empty"><span class="ei">OK</span><h3>' + msgs[filter] + '</h3><p>Dang cho don tu khach...</p></div>';
+    var msgs = { all:'Chua co don nao', new:'Khong co don moi', preparing:'Khong co don dang lam', done:'Chua co don hoan thanh' };
+    grid.innerHTML = '<div class="empty"><span class="ei">&#9989;</span><h3>' + msgs[filter] + '</h3><p>Dang cho don tu khach...</p></div>';
     return;
   }
 
-  grid.innerHTML = list.map(o => {
-    const items = (o.items || []).map(i =>
-      '<div class="row">' +
-      '<div class="rl"><span class="em">' + (i.emoji || '') + '</span>' +
-      '<span>' + i.name + '<span class="qt">x' + i.qty + '</span></span></div>' +
-      '<span class="pr">' + fmt(i.price * i.qty) + '</span></div>'
-    ).join('');
+  var SPILL = {
+    new:       { label:'MOI',      cls:'p-new'  },
+    preparing: { label:'DANG LAM', cls:'p-prep' },
+    done:      { label:'XONG',     cls:'p-done' }
+  };
 
-    const note = o.note ? '<div class="cnote"><b>Ghi chu:</b> ' + o.note + '</div>' : '';
+  grid.innerHTML = list.map(function(o) {
+    var items = (o.items || []).map(function(i){
+      return '<div class="row"><div class="rl"><span class="em">' + (i.emoji||'') + '</span>' +
+        '<span>' + i.name + '<span class="qt">x' + i.qty + '</span></span></div>' +
+        '<span class="pr">' + fmt(i.price * i.qty) + '</span></div>';
+    }).join('');
 
-    const acts =
-      (o.status === 'new'       ? '<button class="btn b-start" onclick="doSetStatus('' + o._key + '','preparing')">Bat dau</button>' : '') +
-      (o.status === 'preparing' ? '<button class="btn b-done"  onclick="doSetStatus('' + o._key + '','done')">Xong</button>' : '') +
-      (o.status === 'done'      ? '<button class="btn b-undo"  onclick="doSetStatus('' + o._key + '','preparing')">Hoan tac</button>' : '') +
-      '<button class="btn b-del" onclick="doDelOrder('' + o._key + '')">Xoa</button>';
+    var note = o.note ? '<div class="cnote"><b>Ghi chu:</b> ' + o.note + '</div>' : '';
+
+    var acts =
+      (o.status === 'new'       ? '<button class="btn b-start" onclick="setStatus('' + o._key + '','preparing')">Bat dau</button>' : '') +
+      (o.status === 'preparing' ? '<button class="btn b-done"  onclick="setStatus('' + o._key + '','done')">Xong</button>' : '') +
+      (o.status === 'done'      ? '<button class="btn b-undo"  onclick="setStatus('' + o._key + '','preparing')">Hoan tac</button>' : '') +
+      '<button class="btn b-del" onclick="delOrder('' + o._key + '')">Xoa</button>';
 
     return '<div class="card s-' + o.status + '">' +
-      '<div class="ch">' +
-      '<div><div class="cid">' + (o.orderId || '-') + '</div><div class="ctbl">' + (o.table || '-') + '</div></div>' +
-      '<span class="pill ' + SPILL[o.status].cls + '">' + SPILL[o.status].label + '</span>' +
-      '</div>' +
-      '<div class="citems">' + items + '</div>' +
-      note +
-      '<div class="cf">' +
-      '<div><div class="ctot">' + fmt(o.total || 0) + '</div><div class="cpay">' + (PAY[o.payMethod] || o.payMethod || '') + '</div></div>' +
-      '<div class="acts">' + acts + '</div>' +
-      '</div></div>';
+      '<div class="ch"><div>' +
+      '<div class="cid">' + (o.orderId||'-') + '</div>' +
+      '<div class="ctbl">' + (o.table||'-') + '</div>' +
+      '</div><span class="pill ' + SPILL[o.status].cls + '">' + SPILL[o.status].label + '</span></div>' +
+      '<div class="citems">' + items + '</div>' + note +
+      '<div class="cf"><div>' +
+      '<div class="ctot">' + fmt(o.total||0) + '</div>' +
+      '<div class="cpay">' + (PAY[o.payMethod]||o.payMethod||'') + '</div>' +
+      '</div><div class="acts">' + acts + '</div></div></div>';
   }).join('');
 }
 
 function updateStats() {
-  const all = Object.values(orders);
-  document.getElementById('sN').textContent = all.filter(o => o.status === 'new').length;
-  document.getElementById('sP').textContent = all.filter(o => o.status === 'preparing').length;
-  document.getElementById('sD').textContent = all.filter(o => o.status === 'done').length;
-  const rev = all.reduce((s, o) => s + (o.total || 0), 0);
-  document.getElementById('sR').textContent = rev >= 1000 ? Math.round(rev / 1000) + 'k' : fmt(rev);
+  var all = Object.values(orders);
+  document.getElementById('sN').textContent = all.filter(function(o){ return o.status==='new'; }).length;
+  document.getElementById('sP').textContent = all.filter(function(o){ return o.status==='preparing'; }).length;
+  document.getElementById('sD').textContent = all.filter(function(o){ return o.status==='done'; }).length;
+  var rev = all.reduce(function(s,o){ return s + (o.total||0); }, 0);
+  document.getElementById('sR').textContent = rev >= 1000 ? Math.round(rev/1000) + 'k' : fmt(rev);
 }
-
-// ---- GLOBAL FUNCTIONS ----
-window.doToggleSound = () => {
-  soundOn = !soundOn;
-  const b = document.getElementById('sndBtn');
-  b.textContent = soundOn ? 'Bell ON' : 'Bell OFF';
-  b.classList.toggle('on', soundOn);
-};
-window.doFilter = (f, btn) => {
-  filter = f;
-  document.querySelectorAll('.fb').forEach(b => b.classList.remove('on'));
-  btn.classList.add('on');
-  render();
-};
-window.doClearDone = async () => {
-  for (const k of Object.keys(orders).filter(k => orders[k].status === 'done'))
-    await remove(ref(db, 'orders/' + k));
-};
-window.doSetStatus = async (key, status) => await update(ref(db, 'orders/' + key), { status });
-window.doDelOrder  = async key => await remove(ref(db, 'orders/' + key));
 </script>
 </body>
 </html>
